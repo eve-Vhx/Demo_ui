@@ -8,15 +8,23 @@ import OuterErrorBound from '../utilities/err/OuterErrorBound';
 
 import ROSCon from '../components/RosCon';
 import MapVis from '../components/MapVis';
+import TelemVis from '../components/TelemVis';
+
+import Logo from '../images/Logo-01.png';
+import '../css/Header.css';
 
 const MissionContext = React.createContext();
 
 function Single() {
 
+
     return (
     <>
         <OuterErrorBound>
             <Container className='justify-content-center'>
+                <Row className='justify-content-center'>
+                    <img src={ Logo } alt="" className='logo'/>
+                </Row>
                 <Row>
                     <Col className='' >
 
@@ -25,11 +33,17 @@ function Single() {
                             <MapVis/>
                         </MissionContext.Provider>
                     </Col>
-                    <Col className='' md={ 4 }>
-                        <h2>Control</h2>
-                        <InnerErrorBound>
-                            <ROSCon/>
-                        </InnerErrorBound>
+                    <Col className='px-5' md={ 4 }>
+                        <Row>
+                            <h2>Control</h2>
+                            <InnerErrorBound>
+                                <ROSCon/>
+                            </InnerErrorBound>
+                        </Row>
+                        <Row className='py-4'>
+                            <h2>Mission Telemetry</h2>
+                            <TelemVis/>
+                        </Row>
                     </Col>
                 </Row>
             </Container>
