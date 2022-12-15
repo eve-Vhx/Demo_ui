@@ -6,19 +6,18 @@ import maplibregl from "maplibre-gl";
 // imports:
 import "maplibre-gl/dist/maplibre-gl.css";
 import drone_image from "../images/QROW_UI_new.png";
+import nest_image from "../images/eve_nest.png";
 import { gps_pos_tuple } from './RosCon';
 import { useEffect, useState } from "react";
 
 
 function MapVis() {
-    console.log("loading map...")
 
     var [gps_data, updateData] = useState([30.391,-97.727,0])
 
     useEffect(() => {
         const interval = setInterval(() => {
           updateData(gps_data = gps_pos_tuple)
-          console.log(gps_data)
         }, 500);
         return () => clearInterval(interval);
       }, []);
@@ -48,6 +47,17 @@ function MapVis() {
                 rotation="0"
             >
                 <img src={ drone_image } alt="" width="68px" height="60px"/>
+            </Marker>
+
+            <Marker 
+                latitude={ 30.391 }
+                longitude={ -97.727 }
+                anchor="center"
+                color="blue"
+                style={{ cursor: "pointer" }}
+                rotation="0"
+            >
+                <img src={ nest_image } alt="" width="60px" height="60px"/>
             </Marker>
 
 

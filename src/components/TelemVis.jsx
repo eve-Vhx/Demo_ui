@@ -11,7 +11,7 @@ import Row  from 'react-bootstrap/Row';
 import Stack from 'react-bootstrap/Stack';
 
 import '../css/Telem.css';
-import { gps_pos_tuple } from './RosCon';
+import { gps_pos_tuple, state, armed } from './RosCon';
 
 
 
@@ -22,22 +22,45 @@ function TelemVis() {
     useEffect(() => {
         const interval = setInterval(() => {
           updateData(gps_data = gps_pos_tuple)
-          console.log(gps_data)
         }, 1000);
         return () => clearInterval(interval);
       }, []);
 
     return(
         <Container className='telemBox justify-content-center'>
+
                 <Col className='m-4'>
-                    <Row> Current State | takeoff </Row>
-                    <Row> Velocity | 4m/s </Row>
-                    <Row> Latitude | { gps_data[0] } </Row>
-                    <Row> Longitude | { gps_data[1] } </Row>
-                    <Row> Altitude | 40m </Row>
-                    <Row> Battery | 57% </Row>
+                    <Row> 
+                        <Col>Current State |</Col>
+                        <Col>{ state }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Arming |</Col>
+                        <Col>{ armed }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Velocity |</Col>
+                        <Col>OFFLINE m/s</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Latitude |</Col>
+                        <Col>{ gps_data[0] }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Longitude |</Col>
+                        <Col>{ gps_data[1] }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Altitude |</Col>
+                        <Col>{ gps_data[2] }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Battery |</Col>
+                        <Col>OFFLINE %</Col>
+                    </Row>
                 </Col>
         </Container>
+
     )
 }
 

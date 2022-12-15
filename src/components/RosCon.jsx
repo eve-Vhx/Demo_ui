@@ -14,6 +14,9 @@ import Stack from 'react-bootstrap/Stack';
 import MissionModal from './modals/MissionModal';
 import '../css/RosCon.css';
 export var gps_pos_tuple = [30.391,-97.727,0];
+export var state = "OFFLINE";
+export var armed = false;
+export var battery = 100
 export var service_client = null;
 
 function ROSCon() {
@@ -21,6 +24,8 @@ function ROSCon() {
     const ros = new ROSLIB.Ros();
     var connection_status = false;
     let gps_listener = null;
+    let state_listener = null;
+    let battery_listener = null;
 
       // Mounted state changes
     const [badgecolor, setBadgecolor] = React.useState('');
@@ -58,25 +63,33 @@ function ROSCon() {
                     <Button
                         variant="outline-success"
                         onClick={ () => { if(connection_status == false) {
-                            ros.connect('ws://localhost:9090/');
+                            ros.connect('ws://10.0.30.232:9090/');
                             gps_listener = new ROSLIB.Topic({
                               ros: ros,
-                              name: '/drone1_gps',
-                              messageType: 'sensor_msgs/NavSatFix'
+                              name: '/mavros/gpsstatus/gps1/raw',
+                              messageType: 'mavros_msgs/GPSRAW'
                             }).subscribe( (message) => {
-                                if (message.latitude == NaN) {
-                                    gps_pos_tuple = [30.391, -97.727, 240]
+                              
+                                gps_pos_tuple = [message.lat, message.lon, message.alt];
+                              
+                              });
+                            state_listener = new ROSLIB.Topic({
+                              ros: ros,
+                              name: '/mavros/state',
+                              messageType: 'mavros_msgs/State'
+                            }).subscribe( (message) => {
+                              
+                                state = message.mode;
+                                if (message.armed == false) {
+                                  armed = "DISARMED";
+                                }
+                                else if (message.armed == true) {
+                                  armed = "ARMED";
                                 }
                                 else {
-                                    gps_pos_tuple = [message.latitude, message.longitude, message.altitude];
+                                  armed = "DISCONNECTED FROM VEHICLE"
                                 }
                               
-                            
-                              });
-                              service_client = new ROSLIB.Service({
-                                ros : ros,
-                                name : '/ui_mission_req',
-                                serviceType : 'msg_pkg/UiReq'
                               });
                               connection_status = true;
                             }
