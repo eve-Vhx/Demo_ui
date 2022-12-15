@@ -23,7 +23,7 @@ function Single() {
         <OuterErrorBound>
             <Container className='justify-content-center'>
                 <Row className='justify-content-center'>
-                    <img src={ Logo } alt="" className='logo'/>
+                    <img src={ Logo } alt="" style={{ width: "400px", margin: "1rem" }}/>
                 </Row>
                 <Row>
                     <Col className='' >

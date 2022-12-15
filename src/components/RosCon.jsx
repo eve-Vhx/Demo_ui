@@ -13,7 +13,7 @@ import Stack from 'react-bootstrap/Stack';
 // Local Dependencies
 import MissionModal from './modals/MissionModal';
 import '../css/RosCon.css';
-export var gps_pos_tuple = [0,0,0];
+export var gps_pos_tuple = [30.391,-97.727,0];
 export var service_client = null;
 
 function ROSCon() {

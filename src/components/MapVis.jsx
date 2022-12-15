@@ -5,7 +5,7 @@ import maplibregl from "maplibre-gl";
 
 // imports:
 import "maplibre-gl/dist/maplibre-gl.css";
-import drone_image from "../images/drone.jpeg";
+import drone_image from "../images/QROW_UI_new.png";
 import { gps_pos_tuple } from './RosCon';
 import { useEffect, useState } from "react";
 
@@ -19,7 +19,7 @@ function MapVis() {
         const interval = setInterval(() => {
           updateData(gps_data = gps_pos_tuple)
           console.log(gps_data)
-        }, 1000);
+        }, 500);
         return () => clearInterval(interval);
       }, []);
 
@@ -45,9 +45,9 @@ function MapVis() {
                 anchor="center"
                 color="blue"
                 style={{ cursor: "pointer" }}
-                rotation="30"
+                rotation="0"
             >
-                <img src={ drone_image } alt="" width="60px" height="40px"/>
+                <img src={ drone_image } alt="" width="68px" height="60px"/>
             </Marker>
 
 
