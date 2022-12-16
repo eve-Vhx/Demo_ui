@@ -70,7 +70,7 @@ function ROSCon() {
                               messageType: 'mavros_msgs/GPSRAW'
                             }).subscribe( (message) => {
                               
-                                gps_pos_tuple = [message.lat, message.lon, message.alt];
+                                gps_pos_tuple = [message.lat*(10**-7).toFixed(3), message.lon*(10**-7).toFixed(3), message.alt*(10**-3).toFixed(2)];
                               
                               });
                             state_listener = new ROSLIB.Topic({
@@ -90,6 +90,11 @@ function ROSCon() {
                                   armed = "DISCONNECTED FROM VEHICLE"
                                 }
                               
+                              });
+                              service_client = new ROSLIB.Service({
+                                ros : ros,
+                                name : '/ui_mission_req',
+                                serviceType : 'msg_pkg/UiReq'
                               });
                               connection_status = true;
                             }
