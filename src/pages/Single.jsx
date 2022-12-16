@@ -9,6 +9,7 @@ import OuterErrorBound from '../utilities/err/OuterErrorBound';
 import ROSCon from '../components/RosCon';
 import MapVis from '../components/MapVis';
 import TelemVis from '../components/TelemVis';
+import GimbalVis from '../components/GimbalVis';
 
 import Logo from '../images/Logo-01.png';
 import '../css/Header.css';
@@ -43,6 +44,10 @@ function Single() {
                         <Row className='py-4'>
                             <h2>Mission Telemetry</h2>
                             <TelemVis/>
+                        </Row>
+                        <Row className='py-4'>
+                            <h2>Gimbal Control</h2>
+                            <GimbalVis/>
                         </Row>
                     </Col>
                 </Row>

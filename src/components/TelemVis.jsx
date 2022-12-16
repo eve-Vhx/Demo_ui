@@ -11,7 +11,7 @@ import Row  from 'react-bootstrap/Row';
 import Stack from 'react-bootstrap/Stack';
 
 import '../css/Telem.css';
-import { gps_pos_tuple, state, armed } from './RosCon';
+import { gps_pos_tuple, state, armed, distance, velocity_x, velocity_z } from './RosCon';
 
 
 
@@ -31,31 +31,39 @@ function TelemVis() {
 
                 <Col className='m-4'>
                     <Row> 
-                        <Col>Current State |</Col>
+                        <Col>Current State</Col>
                         <Col>{ state }</Col>
                     </Row>
                     <Row> 
-                        <Col>Arming |</Col>
+                        <Col>Arming</Col>
                         <Col>{ armed }</Col>
                     </Row>
                     <Row> 
-                        <Col>Velocity |</Col>
-                        <Col>OFFLINE m/s</Col>
+                        <Col>Forward Velocity</Col>
+                        <Col>{ velocity_x } m/s</Col>
                     </Row>
                     <Row> 
-                        <Col>Latitude |</Col>
-                        <Col>{ gps_data[0] }</Col>
+                        <Col>Vertical Velocity</Col>
+                        <Col>{ velocity_z } m/s</Col>
                     </Row>
                     <Row> 
-                        <Col>Longitude |</Col>
-                        <Col>{ gps_data[1] }</Col>
+                        <Col>Latitude</Col>
+                        <Col>{ gps_data[0].toFixed(6) }</Col>
                     </Row>
                     <Row> 
-                        <Col>Altitude |</Col>
-                        <Col>{ gps_data[2] }</Col>
+                        <Col>Longitude</Col>
+                        <Col>{ gps_data[1].toFixed(6) }</Col>
                     </Row>
                     <Row> 
-                        <Col>Battery |</Col>
+                        <Col>Altitude</Col>
+                        <Col>{ gps_data[2].toFixed(2) } m</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Ground Distance</Col>
+                        <Col>{ distance } m</Col>
+                    </Row>
+                    <Row> 
+                        <Col>Battery</Col>
                         <Col>OFFLINE %</Col>
                     </Row>
                 </Col>

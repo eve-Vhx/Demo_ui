@@ -16,16 +16,23 @@ import '../css/RosCon.css';
 export var gps_pos_tuple = [30.391,-97.727,0];
 export var state = "OFFLINE";
 export var armed = false;
-export var battery = 100
+export var battery = 100;
+export var distance = 0;
+export var velocity_x = 0;
+export var velocity_z = 0;
 export var service_client = null;
+export var gimbal_publisher = null;
+export const ROSLIB = require('roslib');
 
 function ROSCon() {
-    const ROSLIB = require('roslib');
     const ros = new ROSLIB.Ros();
     var connection_status = false;
     let gps_listener = null;
     let state_listener = null;
     let battery_listener = null;
+    let distance_listener = null;
+    let compass_listener = null;
+    let velocity_listener = null;
 
       // Mounted state changes
     const [badgecolor, setBadgecolor] = React.useState('');
@@ -70,7 +77,7 @@ function ROSCon() {
                               messageType: 'mavros_msgs/GPSRAW'
                             }).subscribe( (message) => {
                               
-                                gps_pos_tuple = [message.lat*(10**-7).toFixed(3), message.lon*(10**-7).toFixed(3), message.alt*(10**-3).toFixed(2)];
+                                gps_pos_tuple = [message.lat*(10**-7), message.lon*(10**-7), message.alt*(10**-3)];
                               
                               });
                             state_listener = new ROSLIB.Topic({
@@ -91,6 +98,46 @@ function ROSCon() {
                                 }
                               
                               });
+
+                              distance_listener = new ROSLIB.Topic({
+                                ros: ros,
+                                name: '/mavros/distance_sensor/hrlv_ez4_pub',
+                                messageType: 'sensor_msgs/Range'
+                              }).subscribe( (message) => {
+                                
+                                  distance = message.range.toFixed(1);
+                                
+                              });
+
+                              
+                              compass_listener = new ROSLIB.Topic({
+                                ros: ros,
+                                name: '/mavros/global_position/compass_hdg',
+                                messageType: 'std_msgs/Float64'
+                              }).subscribe( (message) => {
+                                
+                                  //heading_deg = message.;
+                                
+                              });
+
+                              velocity_listener = new ROSLIB.Topic({
+                                ros: ros,
+                                name: '/mavros/setpoint_velocity/cmd_vel',
+                                messageType: 'geometry_msgs/TwistStamped'
+                              }).subscribe( (message) => {
+                                
+                                  velocity_x = message.twist.linear.x;
+                                  velocity_z = message.twist.linear.z;
+                                
+                              }); 
+
+                              gimbal_publisher = new ROSLIB.Topic({
+                                ros : ros,
+                                name : "/mavros/mount_control/command",
+                                messageType : 'mavros_msgs/MountControl'
+                              });
+                            
+
                               service_client = new ROSLIB.Service({
                                 ros : ros,
                                 name : '/ui_mission_req',
