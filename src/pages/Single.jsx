@@ -20,17 +20,14 @@ import {Nest} from '../models/nest';
 
 const MissionContext = React.createContext();
 
+export var nest_obj = new Nest(1,30.381,-97.737,0);
+
 function Single() {
     
     let drone_obj = new Drone(1,"QROW",30.391,-97.727,0,100);
-    let nest_init = new Nest(0,0,0,0);
-    let nest_array = [];
-    nest_array.push(nest_init);
 
     function dropNest() {
-        let nest_obj = new Nest(nest_array.length + 1,drone_obj.latitude,drone_obj.longitude,drone_obj.altitude);
-        nest_array.push(nest_obj);
-        console.log("Number of nests: " + nest_array.length);
+        nest_obj.position = drone_obj.gps_position;
     }
 
     return (
@@ -45,7 +42,7 @@ function Single() {
 
                 {/* Map Visual eleement called here */}
                         <MissionContext.Provider>
-                            <MapVis drone_obj = {drone_obj} nest_array = {nest_array}/>
+                            <MapVis drone_obj = {drone_obj}/>
                         </MissionContext.Provider>
                     </Col>
                     <Col className='px-5' md={ 4 }>

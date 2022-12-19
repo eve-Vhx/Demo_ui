@@ -1,6 +1,10 @@
 import React from "react";
 import Map, { Layer, Marker, Popup, useMap } from "react-map-gl";
 import maplibregl from "maplibre-gl";
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
 
 // imports:
@@ -9,18 +13,25 @@ import drone_image from "../images/QROW_UI_new.png";
 import nest_image from "../images/eve_nest.png";
 import { gps_pos_tuple } from './RosCon';
 import { useEffect, useState } from "react";
+import { nest_obj } from "../pages/Single";
 
 
 function MapVis(props) {
 
     var [gps_data, updateData] = useState([30.391,-97.727,0])
-    var [nest_data, updateNestData] = useState([0,0,0])
+    var [nest_data, updateNestData] = useState([30.392,-97.728,0])
+    const [showPopup, setShowPopup] = React.useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
           updateData(gps_data = props.drone_obj.gps_position);
-          updateNestData(nest_data = props.nest_array);
-          console.log(nest_data[0]);
+        }, 500);
+        return () => clearInterval(interval);
+      }, []);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          updateNestData(nest_data = nest_obj.position);
         }, 500);
         return () => clearInterval(interval);
       }, []);
@@ -54,30 +65,24 @@ function MapVis(props) {
             </Marker>
 
             <Marker
-                latitude={nest_data[0].position[0]}
-                longitude={nest_data[0].position[1]}
-                anchor="center"
+                latitude={nest_data[0]}
+                longitude={nest_data[1]}
+                anchore="center"
+                style={{ cursor: "pointer" }}
                 rotation="0"
+                onClick={(e) => {
+                    e.originalEvent.stopPropagation();
+                    setShowPopup(!showPopup);
+                  }}
             >
                 <img src={ nest_image } alt="" width="60px"/>
             </Marker>
-            
-            {nest_data.forEach(element => {
-                return(
-                    <Marker
-                        latitude={30.392}
-                        longitude={-97.727}
-                        anchor="center"
-                        style={{ cursor: "pointer" }}
-                        rotation="0"
-                    >
-                    <img src={ nest_image } alt="" width="60px"/>
-                    </Marker>
-                )
-                console.log("Printing element");
-            })}
                 
-            
+            {showPopup && (
+                <Popup latitude={nest_data[0]} longitude={nest_data[1]} closeButton={0}>
+                    <Button variant="success">Deploy To Nest</Button>
+                </Popup>
+            )}
             
 
 
