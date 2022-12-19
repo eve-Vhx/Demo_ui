@@ -12,16 +12,17 @@ import Stack from 'react-bootstrap/Stack';
 
 import '../css/Telem.css';
 import { gps_pos_tuple, state, armed, distance, velocity_x, velocity_z } from './RosCon';
+import { nest_coord } from './GimbalVis';
 
 
 
-function TelemVis() {
+function TelemVis(props) {
 
     var [gps_data, updateData] = useState([30.391,-97.727,0])
 
     useEffect(() => {
         const interval = setInterval(() => {
-          updateData(gps_data = gps_pos_tuple)
+          updateData(gps_data = props.drone_obj.gps_position)
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -32,19 +33,19 @@ function TelemVis() {
                 <Col className='m-4'>
                     <Row> 
                         <Col>Current State</Col>
-                        <Col>{ state }</Col>
+                        <Col>{ props.drone_obj.state }</Col>
                     </Row>
                     <Row> 
                         <Col>Arming</Col>
-                        <Col>{ armed }</Col>
+                        <Col>{ props.drone_obj.armed }</Col>
                     </Row>
                     <Row> 
                         <Col>Forward Velocity</Col>
-                        <Col>{ velocity_x } m/s</Col>
+                        <Col>{ props.drone_obj.vel_x } m/s</Col>
                     </Row>
                     <Row> 
                         <Col>Vertical Velocity</Col>
-                        <Col>{ velocity_z } m/s</Col>
+                        <Col>{ props.drone_obj.vel_z } m/s</Col>
                     </Row>
                     <Row> 
                         <Col>Latitude</Col>
@@ -60,11 +61,11 @@ function TelemVis() {
                     </Row>
                     <Row> 
                         <Col>Ground Distance</Col>
-                        <Col>{ distance } m</Col>
+                        <Col>{ props.drone_obj.distance_z } m</Col>
                     </Row>
                     <Row> 
                         <Col>Battery</Col>
-                        <Col>OFFLINE %</Col>
+                        <Col>{ props.drone_obj.battery }%</Col>
                     </Row>
                 </Col>
         </Container>

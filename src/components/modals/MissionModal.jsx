@@ -10,9 +10,8 @@ import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import ros from "../RosCon";
 import ROSLIB from "roslib";
-import {service_client} from "../RosCon"
+import {service_client} from "../RosCon";
 
- 
 
 const initialMissionData = Object.freeze({
     latitude: 0,
@@ -22,7 +21,9 @@ const initialMissionData = Object.freeze({
 });
 
 
-function DeploymentModal() {
+function DeploymentModal(props) {
+
+  var nest_gps_pos = [0,0,0];
 
   // state
   const [show, setShow] = React.useState(false);
@@ -59,9 +60,12 @@ function DeploymentModal() {
 
   return(
     <>
-      <Button variant="outline-primary" size="lg" onClick={ handleShow }>
-        Deploy Mission
-      </Button>
+      <Row className="p-2">
+        <Button variant="outline-primary" size="lg" onClick={ handleShow }>
+          Deploy Mission
+        </Button>
+      </Row>
+
 
 {/* --------------MODAL START-------------- */}
       <Modal show={ show } onHide={ handleClose }>

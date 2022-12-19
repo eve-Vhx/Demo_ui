@@ -24,7 +24,7 @@ export var service_client = null;
 export var gimbal_publisher = null;
 export const ROSLIB = require('roslib');
 
-function ROSCon() {
+function ROSCon(props) {
     const ros = new ROSLIB.Ros();
     var connection_status = false;
     let gps_listener = null;
@@ -77,7 +77,8 @@ function ROSCon() {
                               messageType: 'mavros_msgs/GPSRAW'
                             }).subscribe( (message) => {
                               
-                                gps_pos_tuple = [message.lat*(10**-7), message.lon*(10**-7), message.alt*(10**-3)];
+                                props.drone_obj.gps_position = [message.lat*(10**-7), message.lon*(10**-7), message.alt*(10**-3)];
+          
                               
                               });
                             state_listener = new ROSLIB.Topic({
@@ -86,15 +87,15 @@ function ROSCon() {
                               messageType: 'mavros_msgs/State'
                             }).subscribe( (message) => {
                               
-                                state = message.mode;
+                                props.drone_obj.state = message.mode;
                                 if (message.armed == false) {
-                                  armed = "DISARMED";
+                                  props.drone_obj.armed = "DISARMED";
                                 }
                                 else if (message.armed == true) {
-                                  armed = "ARMED";
+                                  props.drone_obj.armed = "ARMED";
                                 }
                                 else {
-                                  armed = "DISCONNECTED FROM VEHICLE"
+                                  props.drone_obj.armed = "DISCONNECTED FROM VEHICLE"
                                 }
                               
                               });
@@ -105,7 +106,7 @@ function ROSCon() {
                                 messageType: 'sensor_msgs/Range'
                               }).subscribe( (message) => {
                                 
-                                  distance = message.range.toFixed(1);
+                                  props.drone_obj.distance_z = message.range.toFixed(1);
                                 
                               });
 
@@ -126,8 +127,8 @@ function ROSCon() {
                                 messageType: 'geometry_msgs/TwistStamped'
                               }).subscribe( (message) => {
                                 
-                                  velocity_x = message.twist.linear.x;
-                                  velocity_z = message.twist.linear.z;
+                                  props.drone_obj.vel_x = message.twist.linear.x;
+                                  props.drone_obj.vel_z = message.twist.linear.z;
                                 
                               }); 
 
@@ -166,7 +167,7 @@ function ROSCon() {
             </Row>
 
             <Row>
-                <MissionModal/>
+                <MissionModal gps_pos_tuple={ gps_pos_tuple }/>
             </Row>
 
         </Container>

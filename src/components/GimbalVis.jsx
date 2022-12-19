@@ -11,7 +11,10 @@ import Row  from 'react-bootstrap/Row';
 import Stack from 'react-bootstrap/Stack';
 
 import '../css/Telem.css';
-import { gimbal_publisher, ROSLIB } from './RosCon';
+import { gimbal_publisher, ROSLIB, gps_pos_tuple } from './RosCon';
+
+
+export var nest_coord = [30.387734, -97.728561, 0];
 
 
 
@@ -77,8 +80,13 @@ function TelemVis() {
 
     }
 
+    function SaveNest() {
+      nest_coord = gps_pos_tuple;
+    }
+
     return(
       <>
+      <Container className='justify-content-center'>
       <Col>
         <ButtonGroup>
           <Button variant='secondary' onClick={MoveGimbalLeft}>Left</Button>
@@ -91,6 +99,10 @@ function TelemVis() {
           <Button variant='secondary' onClick={MoveGimbalDown}>Down</Button>
         </ButtonGroup>
       </Col>
+      <Row className='m-4'>
+        <Button variant='primary' onClick={SaveNest}>Save Nest</Button>
+      </Row>
+      </Container>
       </>
     )
 }
