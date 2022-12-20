@@ -11,21 +11,34 @@ import Table from "react-bootstrap/Table";
 import ros from "../RosCon";
 import ROSLIB from "roslib";
 import {service_client} from "../RosCon";
+import {nest_obj} from '../../pages/Single';
+import {modal_vis} from '../MapVis';
 
 
 
 
 function VerifyModal(props) {
 
-    var show = props.show_modal;
+    // var show = props.show_modal;
+
+    const [show, setShow] = React.useState(props.show_modal);
+    const [add_alt, setAlt] = React.useState(0);
+
+    const updateAlt = (e) => {
+      setAlt({
+          ...add_alt,
+  
+      });
+    }
+
 
 
 //   // handlers
 //   const handleClose = () => setShow(false);
 //   const handleShow = () => setShow(true);
     function handleClose() {
-        show = false;
-        console.log(show);
+        setShow(false);
+        modal_vis = false;
     }
   
     const submitMission = (e) => {
@@ -33,9 +46,9 @@ function VerifyModal(props) {
     
     
         var request = new ROSLIB.ServiceRequest({
-          lat : parseFloat(props.latitude),
-          lon : parseFloat(props.longitude),
-          alt : parseFloat(props.altitude)
+          lat : parseFloat(nest_obj.position[0]),
+          lon : parseFloat(nest_obj.position[1]),
+          alt : parseFloat(nest_obj.position[2] + add_alt)
         });
         service_client.callService(request, function(result) {
           console.log('Result for service call: ' + result.completion);
@@ -53,7 +66,7 @@ function VerifyModal(props) {
     <>
 
 {/* --------------MODAL START-------------- */}
-      <Modal show={ show } onHide={ handleClose }>
+      <Modal show={ modal_vis } onHide={ handleClose }>
         <Modal.Header closeButton>
           <Modal.Title>
             Mission Verification
@@ -63,6 +76,7 @@ function VerifyModal(props) {
 {/* --------------FORM START-------------- */}
         <Modal.Body>
             <h4 className="text-danger">[Warning] You are about to deploy an active drone. Are you sure you wish to continue?</h4>
+            <input placeholder="Desired Altitude (m)" name="add_alt" onChange={updateAlt} />
         </Modal.Body>
         {/* --------------FORM END-------------- */}
 

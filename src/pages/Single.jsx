@@ -24,7 +24,7 @@ export var nest_obj = new Nest(1,30.381,-97.737,0);
 
 function Single() {
     
-    let drone_obj = new Drone(1,"QROW",30.391,-97.727,0,100);
+    let drone_obj = new Drone(1,"QROW",30.391,-97.727,240,100);
 
     function dropNest() {
         nest_obj.position = drone_obj.gps_position;
