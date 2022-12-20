@@ -55,8 +55,8 @@ function TelemVis() {
       <RangeSlider
             name="Yaw"
             value={value1}
-            min={-180}
-            max={180}
+            min={-179}
+            max={179}
             onChange={UpdateYaw} 
     />
       </Col>
