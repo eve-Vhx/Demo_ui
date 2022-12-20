@@ -11,6 +11,7 @@ import ROSCon from '../components/RosCon';
 import MapVis from '../components/MapVis';
 import TelemVis from '../components/TelemVis';
 import GimbalVis from '../components/GimbalVis';
+import SaveNest from '../components/SaveNest';
 import NestControl from '../components/NestControl';
 
 import Logo from '../images/Logo-01.png';
@@ -56,6 +57,12 @@ function Single() {
                             <h2>Mission Telemetry</h2>
                             <TelemVis drone_obj = {drone_obj}/>
                         </Row>
+                        <Row className='py-4'>
+                            <h2>Gimbal Control</h2>
+                            <Button variant='outline-secondary' onClick={dropNest}>
+                                Drop Nest
+                            </Button>
+                        </Row>  
                         <Row className='py-4'>
                             <h2>Nest Control</h2>
                             <Button variant='outline-secondary' onClick={dropNest}>
