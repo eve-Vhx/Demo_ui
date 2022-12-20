@@ -14,6 +14,7 @@ import nest_image from "../images/eve_nest.png";
 import { gps_pos_tuple } from './RosCon';
 import { useEffect, useState } from "react";
 import { nest_obj } from "../pages/Single";
+import VerifyModal from "./modals/VerifyModal";
 
 
 function MapVis(props) {
@@ -21,6 +22,7 @@ function MapVis(props) {
     var [gps_data, updateData] = useState([30.391,-97.727,0])
     var [nest_data, updateNestData] = useState([30.392,-97.728,0])
     const [showPopup, setShowPopup] = React.useState(false);
+    const [showVerify, setShowVerify] = React.useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -36,8 +38,11 @@ function MapVis(props) {
         return () => clearInterval(interval);
       }, []);
 
+    
+
 
     return (
+        <>
         <Map
             mapLib={maplibregl}
             initialViewState={{
@@ -80,13 +85,21 @@ function MapVis(props) {
                 
             {showPopup && (
                 <Popup latitude={nest_data[0]} longitude={nest_data[1]} closeButton={0}>
-                    <Button variant="success">Deploy To Nest</Button>
+                    <Button variant="success" onClick={(e) => {
+                         setShowVerify(!showVerify)
+                    }}>Deploy To Nest</Button>
                 </Popup>
             )}
             
 
 
         </Map>
+
+        <VerifyModal show_modal = {showVerify}/>
+
+
+        </>
+
     )
 
 }
