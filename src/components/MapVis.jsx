@@ -23,7 +23,7 @@ import {service_client} from './RosCon';
 export var modal_vis = false;
 
 const initialAlt = Object.freeze({
-    add_alt_: 0
+    alt_add: 0
 });
 
 
@@ -33,6 +33,15 @@ function MapVis(props) {
     var [nest_data, updateNestData] = useState([30.392,-97.728,0])
     const [showPopup, setShowPopup] = React.useState(false);
     const [showVerify, setShowVerify] = React.useState(false);
+    const [flight_alt, setFlightAlt] = React.useState(initialAlt);
+
+    const updateFlightAltitude = (e) => {
+        setFlightAlt({
+            ...flight_alt,
+    
+            [e.target.name]: e.target.value.trim()
+        });
+      }
 
 
     useEffect(() => {
@@ -60,8 +69,9 @@ function MapVis(props) {
         var request = new ROSLIB.ServiceRequest({
           lat : parseFloat(nest_obj.position[0]),
           lon : parseFloat(nest_obj.position[1]),
-          alt : parseFloat(nest_obj.position[2] + 6)
+          alt : parseFloat(nest_obj.position[2] + Number(flight_alt.alt_add))
         });
+        console.log(request.alt);
         service_client.callService(request, function(result) {
           console.log('Result for service call: ' + result.completion);
         });
@@ -139,22 +149,17 @@ function MapVis(props) {
 
 {/* --------------FORM START-------------- */}
         <Modal.Body>
-            <h4 className="text-danger">[Warning] You are about to deploy an active drone. Are you sure you wish to continue?</h4>
             <Form>
-            <Row className='inp-space'>
-                <Form.Group controlId='trgt-position'>
-                    <Form.Label>
-                        Specify Altitude
-                    </Form.Label>
-                    <Row>
-                        <Col className="m-3">
-                            {/* <input placeholder="Desired Altitude" name="add_alt_" onChange={updateAlt}/> */}
-                        </Col>
-                    </Row>
-                    <Row>Flight Altitude: </Row>
-                </Form.Group>
-            </Row>
-        </Form>
+              <Form.Label>
+              <h4 className="text-danger">[Warning] You are about to deploy an active drone. Are you sure you wish to continue?</h4>
+              </Form.Label>
+                <input placeholder="Specify Flight Altitude" name="alt_add" onChange={updateFlightAltitude}/>
+                <Col className="m-4">
+                  <Row className="p-2">Destination Lat: {nest_obj.position[0]}</Row>
+                  <Row className="p-2">Destination Lon: {nest_obj.position[1]}</Row>
+                  <Row className="p-2">Destination Alt: {(nest_obj.position[2] + Number(flight_alt.alt_add))}</Row>
+                </Col>
+            </Form>
         </Modal.Body>
         {/* --------------FORM END-------------- */}
 

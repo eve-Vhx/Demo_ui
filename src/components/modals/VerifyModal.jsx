@@ -59,8 +59,6 @@ function VerifyModal(props) {
 
 
 
-  console.log(props.show_modal);
-
 
   return(
     <>
