@@ -54,7 +54,7 @@ function TelemVis() {
     <>
     <Container className='justify-content-center'>
     <Col>
-    Yaw
+    Yaw   
     <RangeSlider
           name="Yaw"
           value={value1}
@@ -62,10 +62,9 @@ function TelemVis() {
           max={179}
           onChange={UpdateYaw} 
   />
-    </Col>
-    <Col>
     Pitch
     <RangeSlider
+          name="Pitch"
           value={value2}
           min={-30}
           max={30}
