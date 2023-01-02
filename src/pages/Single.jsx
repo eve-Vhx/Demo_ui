@@ -11,12 +11,13 @@ import ROSCon from '../components/RosCon';
 import MapVis from '../components/MapVis';
 import TelemVis from '../components/TelemVis';
 import GimbalVis from '../components/GimbalVis';
-import NestControl from '../components/NestControl';
+import NestControl from '../components/ManageObjects';
 
 import Logo from '../images/Logo-01.png';
 import '../css/Header.css';
 import {Drone} from '../models/drone';
 import {Nest} from '../models/nest';
+import ManageObjects from '../components/ManageObjects';
 
 const MissionContext = React.createContext();
 
@@ -34,22 +35,27 @@ function Single() {
     <>
         <OuterErrorBound>
             <Container className='justify-content-center'>
+                {/* Logo at top pf page */}
                 <Row className='justify-content-center'>
                     <img src={ Logo } alt="" style={{ width: "400px", margin: "1rem" }}/>
                 </Row>
+                {/* Finish Logo */}
                 <Row className='justify-content-center'>
                     <Col>
 
-                {/* Map Visual eleement called here */}
+                        {/* Map Visual eleement called here */}
                         <MissionContext.Provider>
                             <MapVis drone_obj = {drone_obj}/>
                         </MissionContext.Provider>
+                        {/* Finish map visual element */}
+
                     </Col>
                     <Col className='px-5' md={ 4 }>
                         <Row>
                             <h2>Control</h2>
                             <InnerErrorBound>
-                                <ROSCon drone_obj = {drone_obj}/>
+                                {/* <ROSCon drone_obj = {drone_obj}/> */}
+                                <ManageObjects/>
                             </InnerErrorBound>
                         </Row>
                         <Row className='py-4'>
@@ -57,10 +63,11 @@ function Single() {
                             <TelemVis drone_obj = {drone_obj}/>
                         </Row>
                         <Row className='py-4'>
-                            <h2>Nest Control</h2>
+                            {/* <ManageObjects/> */}
+                            {/* <h2>Nest Control</h2>
                             <Button variant='outline-secondary' onClick={dropNest}>
                                 Drop Nest
-                            </Button>
+                            </Button> */}
                         </Row>                 
                         {/* <Row className='py-4'>
                             <h2>Gimbal Control</h2>

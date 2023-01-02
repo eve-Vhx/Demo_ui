@@ -22,15 +22,22 @@ import {service_client} from './RosCon';
 
 export var modal_vis = false;
 
+// Initial data for state objects
+
 const initialAlt = Object.freeze({
     alt_add: 0
 });
 
+const initialDroneData = [30.394, -97.723, 0]
+const initialNestData = [30.392, -97.728, 0]
+
+//////////////////////////////////
+
 
 function MapVis(props) {
 
-    var [gps_data, updateData] = useState([30.391,-97.727,0])
-    var [nest_data, updateNestData] = useState([30.392,-97.728,0])
+    var [drone_data, updateDroneData] = useState(initialDroneData)
+    var [nest_data, updateNestData] = useState(initialNestData)
     const [showPopup, setShowPopup] = React.useState(false);
     const [showVerify, setShowVerify] = React.useState(false);
     const [flight_alt, setFlightAlt] = React.useState(initialAlt);
@@ -46,14 +53,8 @@ function MapVis(props) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-          updateData(gps_data = props.drone_obj.gps_position);
-        }, 500);
-        return () => clearInterval(interval);
-      }, []);
-
-      useEffect(() => {
-        const interval = setInterval(() => {
-          updateNestData(nest_data = nest_obj.position);
+          updateDroneData(drone_data = props.drone_obj.gps_position);
+          updateNestData(nest_data = nest_obj.position)
         }, 500);
         return () => clearInterval(interval);
       }, []);
@@ -100,8 +101,8 @@ function MapVis(props) {
             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
             <Marker 
-                latitude={ gps_data[0] }
-                longitude={ gps_data[1] }
+                latitude={ drone_data[0] }
+                longitude={ drone_data[1] }
                 anchor="center"
                 color="blue"
                 style={{ cursor: "pointer" }}
