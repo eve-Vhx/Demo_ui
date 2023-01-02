@@ -14,6 +14,9 @@ import {service_client} from "./RosCon"
 
 import {gps_pos_tuple} from './RosCon';
 
+//Import other react components
+import MissionModal from "./modals/MissionModal";
+
 //Import objects
 import {Drone} from "../models/drone";
 import {Nest} from "../models/nest";
@@ -28,6 +31,8 @@ export let nest_obj_array = []
 //Global ROS Variables
 export const ROSLIB = require('roslib');
 export const ros = new ROSLIB.Ros();
+
+
 
 function createDrone() {
     let drone_obj = new Drone(1,"QROW",30.391,-97.727,240,100);
@@ -77,56 +82,75 @@ function ManageObjects() {
                 <div className='hr mb-3 mx-auto' style={{border: '1px solid white', maxWidth:'100%'}}/>
                 </Row>
                 <Row>
-                <Col>
-                    <Button
-                        variant="outline-success"
-                        onClick={ () => { 
-                            ros.connect('ws://10.0.30.232:9090/');
+                    <Col>
+                        <Button
+                            variant="outline-success"
+                            onClick={ () => { 
+                                //ros.connect('ws://10.0.30.232:9090/');
+                                ros.connect('ws://localhost:9090/');
 
-                            GPS_incoming.gps_listener1.subscribe( (message) => {
-                                
-                            });
-                        }}>
-                        eve Connect
-                    </Button>
-                </Col>
-                <Col>
-                    <Button
-                        variant="outline-danger">
-                        eve Disconnect
-                    </Button>
-                </Col>
-            </Row>
+                                let GPS_incoming_obj = new GPS_incoming()
+
+                                createDrone();
+
+                                GPS_incoming_obj.gps_listener2.subscribe( (message) => {
+                                    if(drone_obj_array.length > 0) {
+                                        drone_obj_array[0].gps_position = [message.latitude, message.longitude, message.altitude];
+                                    }
+                                });
+                            }}>
+                            eve Connect
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button
+                            variant="outline-danger">
+                            eve Disconnect
+                        </Button>
+                    </Col>
+                </Row>
             {/* End Connection to ROS and ROS topics */}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            {/* Start drone and nest management panel */}
+                <Row className='mt-3'>
+                    <h4>
+                        <Badge bg= { badgecolor }>Drone and Nest Management</Badge>
+                    </h4>
+                    <div className='hr mb-3 mx-auto' style={{border: '1px solid white', maxWidth:'100%'}}/>
+                </Row>
 
                 <Row>
-                    <Col className="m-3">
-                        <Button variant="outline-success" onClick={createDrone}>Add Drone</Button>
-                        <Button variant="outline-danger">Remove Drone</Button>
+                    <Col>
+                        <Row className="m-3">
+                            <Button variant="outline-success" onClick={createDrone}>+ Drone</Button>
+                        </Row>
+                        <Row className="m-3">
+                            <Button variant="outline-danger">- Drone</Button>
+                        </Row>
                     </Col>
-                    <Col className="m-3">
-                        <Button variant="outline-success" onClick={createNest}>Add Nest</Button>
-                        <Button variant="outline-danger">Remove Nest</Button>
+                    <Col>
+                        <Row className="m-3">
+                            <Button variant="outline-success" onClick={createNest}>+ Nest</Button>
+                        </Row>
+                        <Row className="m-3">
+                            <Button variant="outline-danger">- Nest</Button>
+                        </Row>
                     </Col>
+                </Row>
+            {/* End drone and nest management panel */}
+
+            {/* Start mission deployment panel */}
+                <Row className='pb-2 pt-4'>
+                    <h4>
+                        <Badge bg= { badgecolor }>
+                            Mission Deployment
+                        </Badge>
+                    </h4>
+                    <div className='hr mb-3 mx-auto' style={{border: '1px solid white', maxWidth:'100%'}}/>
+                </Row>
+
+                <Row>
+                    <MissionModal/>
                 </Row>
             </Container>
         </>

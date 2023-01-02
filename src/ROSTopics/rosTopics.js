@@ -8,5 +8,10 @@ export class GPS_incoming {
             name: '/mavros/gpsstatus/gps1/raw',
             messageType: 'mavros_msgs/GPSRAW'
         })
+        this.gps_listener2 = new ROSLIB.Topic({
+            ros: ros,
+            name: '/drone1_gps',
+            messageType: 'sensor_msgs/NavSatFix'
+        })
     }
 }
