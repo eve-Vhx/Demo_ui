@@ -54,8 +54,8 @@ function MapVis(props) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-          updateDroneData(drone_data = props.drone_obj.gps_position);
-          //updateDroneData(drone_data = drone_obj_array[0].gps_position);
+          //updateDroneData(drone_data = props.drone_obj.gps_position);
+          updateDroneData(drone_data = drone_obj_array[0].gps_position);
           //console.log(drone_obj_array[0].gps_position)
           updateNestData(nest_data = nest_obj.position)
         }, 500);
@@ -103,16 +103,25 @@ function MapVis(props) {
             }}
             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
-            <Marker 
-                latitude={ drone_data[0] }
-                longitude={ drone_data[1] }
-                anchor="center"
-                color="blue"
-                style={{ cursor: "pointer" }}
-                rotation="0"
-            >
-                <img src={ drone_image } alt="" width="68px" height="60px"/>
-            </Marker>
+            {(() => {
+                for (let i = 0; i < 2; i++) {
+                  <Marker
+                    latitude="30.341"
+                    longitude="-97.720"
+                    color="green"
+                  ><img src={ drone_image } alt="" width="68px" height="60px"/></Marker>
+                }
+            })()}
+              <Marker 
+                  latitude={ drone_data[0] }
+                  longitude={ drone_data[1] }
+                  anchor="center"
+                  color="blue"
+                  style={{ cursor: "pointer" }}
+                  rotation="0"
+              >
+                  <img src={ drone_image } alt="" width="68px" height="60px"/>
+              </Marker>
 
             <Marker
                 latitude={nest_data[0]}
