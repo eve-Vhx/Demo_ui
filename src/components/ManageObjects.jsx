@@ -14,8 +14,9 @@ import {service_client} from "./RosCon"
 
 import {gps_pos_tuple} from './RosCon';
 
-//Import other react components
+//Import modals
 import MissionModal from "./modals/MissionModal";
+import CreateDroneModal from "./modals/CreateDrone";
 
 //Import objects
 import {Drone} from "../models/drone";
@@ -122,7 +123,8 @@ function ManageObjects() {
                 <Row>
                     <Col>
                         <Row className="m-3">
-                            <Button variant="outline-success" onClick={createDrone}>+ Drone</Button>
+                            {/* <Button variant="outline-success" onClick={createDrone}>+ Drone</Button> */}
+                            <CreateDroneModal/>
                         </Row>
                         <Row className="m-3">
                             <Button variant="outline-danger">- Drone</Button>
@@ -152,6 +154,10 @@ function ManageObjects() {
                 <Row>
                     <MissionModal/>
                 </Row>
+            {/* End mission deployment panel */}
+
+            {/* Start gimbal sliders */}
+                
             </Container>
         </>
     );

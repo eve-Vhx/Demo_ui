@@ -55,8 +55,8 @@ function MapVis(props) {
     useEffect(() => {
         const interval = setInterval(() => {
           updateDroneData(drone_data = props.drone_obj.gps_position);
-          updateDroneData(drone_data = drone_obj_array[0].gps_position);
-          console.log(drone_obj_array[0].gps_position)
+          //updateDroneData(drone_data = drone_obj_array[0].gps_position);
+          //console.log(drone_obj_array[0].gps_position)
           updateNestData(nest_data = nest_obj.position)
         }, 500);
         return () => clearInterval(interval);
