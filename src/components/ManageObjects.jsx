@@ -24,14 +24,19 @@ import {Nest} from "../models/nest";
 
 //Import ROS Topics
 import { GPS_incoming } from "../ROSTopics/rosTopics";
+import { Connection_checks_incoming } from "../ROSTopics/rosTopics";
 
 //Declare objects arrays
 export let drone_obj_array = []
 export let nest_obj_array = []
 
+
 //Global ROS Variables
 export const ROSLIB = require('roslib');
 export const ros = new ROSLIB.Ros();
+
+export let connection_check_pi1 = false;
+export let connection_check_px41 = false;
 
 
 
@@ -52,6 +57,8 @@ function ManageObjects() {
 
     // Ros connection state changes
     const [badgecolor, setBadgecolor] = React.useState('');
+    const [ConnectbadgecolorPi, setConnectbadgecolorPi] = React.useState('danger');
+    const [ConnectbadgecolorPx4, setConnectbadgecolorPx4] = React.useState('danger');
 
     useEffect(() => {    
         ros.on('connection', () => {
@@ -87,18 +94,39 @@ function ManageObjects() {
                         <Button
                             variant="outline-success"
                             onClick={ () => { 
-                                //ros.connect('ws://10.0.30.232:9090/');
-                                ros.connect('ws://localhost:9090/');
+                                ros.connect('ws://10.0.30.232:9090/');
+                                //ros.connect('ws://localhost:9090/');
 
                                 let GPS_incoming_obj = new GPS_incoming()
-
-                                createDrone();
+                                let Connection_checks_incoming_obj = new Connection_checks_incoming()
 
                                 GPS_incoming_obj.gps_listener2.subscribe( (message) => {
                                     if(drone_obj_array.length > 0) {
                                         drone_obj_array[0].gps_position = [message.latitude, message.longitude, message.altitude];
                                     }
                                 });
+
+                                Connection_checks_incoming_obj.checkups_listener1.subscribe( (message) => {
+                                    connection_check_pi1 = message.pi_connect;
+                                    connection_check_px41 = message.px4_connect;
+
+                                    if(connection_check_px41 == true) {
+                                        setConnectbadgecolorPx4('success');
+                                        setConnectbadgecolorPi('success');
+                                    }
+                                    else {
+                                        if (connection_check_pi1 == true) {
+                                            setConnectbadgecolorPi('success');
+                                            setConnectbadgecolorPx4('danger');
+                                        }
+                                        else {
+                                            setConnectbadgecolorPi('danger');
+                                            setConnectbadgecolorPx4('danger');
+                                        }
+                                    }
+                                });
+
+
                             }}>
                             eve Connect
                         </Button>
@@ -108,6 +136,18 @@ function ManageObjects() {
                             variant="outline-danger">
                             eve Disconnect
                         </Button>
+                    </Col>
+                </Row>
+                <Row className="m-4">
+                    <Col>
+                    <h4>
+                        <Badge bg={ ConnectbadgecolorPi }>Pi Connect</Badge>
+                    </h4>
+                    </Col>
+                    <Col>
+                    <h4>
+                        <Badge bg={ ConnectbadgecolorPx4 }>PX4 Connect</Badge>
+                    </h4>
                     </Col>
                 </Row>
             {/* End Connection to ROS and ROS topics */}

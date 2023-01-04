@@ -37,7 +37,8 @@ const initialNestData = [30.392, -97.728, 0]
 
 function MapVis(props) {
 
-    var [drone_data, updateDroneData] = useState(initialDroneData)
+    var [drone_data_1, updateDroneData] = useState(initialDroneData)
+    var [drone_data_2, updateDroneData] = useState(initialDroneData)
     var [nest_data, updateNestData] = useState(initialNestData)
     const [showPopup, setShowPopup] = React.useState(false);
     const [showVerify, setShowVerify] = React.useState(false);
@@ -55,7 +56,8 @@ function MapVis(props) {
     useEffect(() => {
         const interval = setInterval(() => {
           //updateDroneData(drone_data = props.drone_obj.gps_position);
-          updateDroneData(drone_data = drone_obj_array[0].gps_position);
+          updateDroneData(drone_data_1 = drone_obj_array[0].gps_position);
+          updateDroneData(drone_data_2 = drone_obj_array[1].gps_position);
           //console.log(drone_obj_array[0].gps_position)
           updateNestData(nest_data = nest_obj.position)
         }, 500);
@@ -103,27 +105,30 @@ function MapVis(props) {
             }}
             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
-            {(() => {
-                for (let i = 0; i < 2; i++) {
-                  <Marker
-                    latitude="30.341"
-                    longitude="-97.720"
-                    color="green"
-                  ><img src={ drone_image } alt="" width="68px" height="60px"/></Marker>
-                }
-            })()}
-              <Marker 
-                  latitude={ drone_data[0] }
-                  longitude={ drone_data[1] }
-                  anchor="center"
-                  color="blue"
-                  style={{ cursor: "pointer" }}
-                  rotation="0"
-              >
-                  <img src={ drone_image } alt="" width="68px" height="60px"/>
-              </Marker>
+            
+            <Marker 
+                latitude={ drone_data_1[0] }
+                longitude={ drone_data_1[1] }
+                anchor="center"
+                color="blue"
+                style={{ cursor: "pointer" }}
+                rotation="0"
+            >
+                <img src={ nest_image } alt="" width="68px" height="60px"/>
+            </Marker>
 
-            <Marker
+            <Marker 
+                latitude={ drone_data_2[0] }
+                longitude={ drone_data_2[1] }
+                anchor="center"
+                color="blue"
+                style={{ cursor: "pointer" }}
+                rotation="0"
+            >
+                <img src={ drone_image } alt="" width="68px" height="60px"/>
+            </Marker>
+
+            <Marker 
                 latitude={nest_data[0]}
                 longitude={nest_data[1]}
                 anchore="center"

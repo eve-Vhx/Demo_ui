@@ -15,3 +15,13 @@ export class GPS_incoming {
         })
     }
 }
+
+export class Connection_checks_incoming {
+    constructor() {
+        this.checkups_listener1 = new ROSLIB.Topic({
+            ros: ros,
+            name: '/connection_checkups',
+            messageType: 'msg_pkg/ui_checkups_msg'
+        })
+    }
+}

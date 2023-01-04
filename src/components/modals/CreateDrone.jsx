@@ -30,12 +30,14 @@ function CreateDroneModal() {
         for (let i = 0; i < drone_obj_array.length; i++) {
             if (drone_obj_array[i].id == newDrone_vin) {
                 drone_match++;
+                drone_obj_array[i].gps_position = [newDrone_lat, newDrone_lon, newDrone_alt]
             }
         }
         if (drone_match == 0){ 
             let new_drone_obj = new Drone(newDrone_vin, newDrone_type, Number(newDrone_lat), Number(newDrone_lon), Number(newDrone_alt), 100);
             drone_obj_array.push(new_drone_obj);
         }
+        handleClose()
     }
 
     const [show, setShow] = React.useState(false);
