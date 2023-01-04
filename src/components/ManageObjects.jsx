@@ -25,6 +25,10 @@ import {Nest} from "../models/nest";
 //Import ROS Topics
 import { GPS_incoming } from "../ROSTopics/rosTopics";
 import { Connection_checks_incoming } from "../ROSTopics/rosTopics";
+import { State_incoming } from "../ROSTopics/rosTopics";
+import { Distance_incoming } from "../ROSTopics/rosTopics";
+import { Velocity_incoming } from "../ROSTopics/rosTopics";
+import { Gimbal_outgoing } from "../ROSTopics/rosTopics";
 
 //Declare objects arrays
 export let drone_obj_array = []
@@ -38,6 +42,13 @@ export const ros = new ROSLIB.Ros();
 export let connection_check_pi1 = false;
 export let connection_check_px41 = false;
 export let drone_gps_pos = [30.394, -97.723, 240];
+
+//Drone 1 telemetry variables
+export let drone1_state = "OFFLINE";
+export let drone1_dist = "OFFLINE";
+export let drone1_vel_x = "OFFLINE";
+export let drone1_vel_y = "OFFLINE";
+export let drone1_armed = "OFFLINE";
 
 
 
@@ -100,6 +111,10 @@ function ManageObjects() {
 
                                 let GPS_incoming_obj = new GPS_incoming()
                                 let Connection_checks_incoming_obj = new Connection_checks_incoming()
+                                let State_incoming_obj = new State_incoming();
+                                let Distance_incoming_obj = new Distance_incoming();
+                                let Velocity_incoming_obj = new Velocity_incoming();
+                                let Gimbal_outgoing_obj = new Gimbal_outgoing();
 
                                 GPS_incoming_obj.gps_listener2.subscribe( (message) => {
                                     if(drone_obj_array.length > 0) {
@@ -126,6 +141,10 @@ function ManageObjects() {
                                             setConnectbadgecolorPx4('danger');
                                         }
                                     }
+                                });
+
+                                State_incoming_obj.state_listener.subscribe( (message) => {
+                                    drone1_state = message.mode;
                                 });
 
 

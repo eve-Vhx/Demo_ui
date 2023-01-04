@@ -35,3 +35,43 @@ export class Mission_request_outgoing {
         });
     }
 }
+
+export class State_incoming {
+    constructor() {
+        this.state_listener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/state',
+            messageType: 'mavros_msgs/State'
+          })
+    }
+}
+
+export class Distance_incoming {
+    constructor() {
+        this.distance_listener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/distance_sensor/hrlv_ez4_pub',
+            messageType: 'sensor_msgs/Range'
+          })
+    }
+}
+
+export class Velocity_incoming {
+    constructor() {
+        this.velocity_listener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/setpoint_velocity/cmd_vel',
+            messageType: 'geometry_msgs/TwistStamped'
+          })
+    }
+}
+
+export class Gimbal_outgoing {
+    constructor() {
+        this.gimbal_publisher = new ROSLIB.Topic({
+            ros : ros,
+            name : "/mavros/mount_control/command",
+            messageType : 'mavros_msgs/MountControl'
+          });
+    }
+}
