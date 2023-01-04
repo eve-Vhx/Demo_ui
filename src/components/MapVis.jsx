@@ -20,6 +20,8 @@ import VerifyModal from "./modals/VerifyModal";
 import ROSLIB from 'roslib';
 import {service_client} from './RosCon';
 import { drone_obj_array } from "./ManageObjects";
+import { drone_gps_pos } from "./ManageObjects";
+import { Mission_request_outgoing } from "../ROSTopics/rosTopics";
 
 export var modal_vis = false;
 
@@ -37,8 +39,9 @@ const initialNestData = [30.392, -97.728, 0]
 
 function MapVis(props) {
 
-    var [drone_data_1, updateDroneData] = useState(initialDroneData)
-    var [drone_data_2, updateDroneData] = useState(initialDroneData)
+    var [test_drone_gps, updateDroneDataTest] = useState(initialDroneData);
+    var [drone_data_1, updateDroneData] = useState(initialDroneData);
+    var [drone_data_2, updateDroneData] = useState(initialDroneData);
     var [nest_data, updateNestData] = useState(initialNestData)
     const [showPopup, setShowPopup] = React.useState(false);
     const [showVerify, setShowVerify] = React.useState(false);
@@ -56,8 +59,9 @@ function MapVis(props) {
     useEffect(() => {
         const interval = setInterval(() => {
           //updateDroneData(drone_data = props.drone_obj.gps_position);
-          updateDroneData(drone_data_1 = drone_obj_array[0].gps_position);
-          updateDroneData(drone_data_2 = drone_obj_array[1].gps_position);
+          //updateDroneData(drone_data_1 = drone_obj_array[0].gps_position);
+          //updateDroneData(drone_data_2 = drone_obj_array[1].gps_position);
+          updateDroneDataTest(test_drone_gps = drone_gps_pos);
           //console.log(drone_obj_array[0].gps_position)
           updateNestData(nest_data = nest_obj.position)
         }, 500);
@@ -71,6 +75,9 @@ function MapVis(props) {
   
     const submitMission = (e) => {
         e.preventDefault()
+
+        let service_client_obj = new Mission_request_outgoing();
+        let service_client = service_client_obj.service_client;
     
         var request = new ROSLIB.ServiceRequest({
           lat : parseFloat(nest_obj.position[0]),
@@ -107,19 +114,8 @@ function MapVis(props) {
         >
             
             <Marker 
-                latitude={ drone_data_1[0] }
-                longitude={ drone_data_1[1] }
-                anchor="center"
-                color="blue"
-                style={{ cursor: "pointer" }}
-                rotation="0"
-            >
-                <img src={ nest_image } alt="" width="68px" height="60px"/>
-            </Marker>
-
-            <Marker 
-                latitude={ drone_data_2[0] }
-                longitude={ drone_data_2[1] }
+                latitude={ test_drone_gps[0] }
+                longitude={ test_drone_gps[1] }
                 anchor="center"
                 color="blue"
                 style={{ cursor: "pointer" }}

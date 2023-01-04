@@ -25,3 +25,13 @@ export class Connection_checks_incoming {
         })
     }
 }
+
+export class Mission_request_outgoing {
+    constructor() {
+        this.service_client = new ROSLIB.Service({
+            ros : ros,
+            name : '/ui_mission_req',
+            serviceType : 'msg_pkg/UiReq'
+        });
+    }
+}

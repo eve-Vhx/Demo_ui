@@ -11,6 +11,7 @@ import Table from "react-bootstrap/Table";
 import ros from "../RosCon";
 import ROSLIB from "roslib";
 import {service_client} from "../RosCon";
+import { Mission_request_outgoing } from "../../ROSTopics/rosTopics";
 
 
 const initialMissionData = Object.freeze({
@@ -44,6 +45,8 @@ function DeploymentModal(props) {
   const submitMission = (e) => {
     e.preventDefault()
 
+    let service_client_obj = new Mission_request_outgoing()
+    let service_client = service_client_obj.service_client;
 
     var request = new ROSLIB.ServiceRequest({
       lat : parseFloat(mission_data.latitude),

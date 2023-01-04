@@ -37,6 +37,7 @@ export const ros = new ROSLIB.Ros();
 
 export let connection_check_pi1 = false;
 export let connection_check_px41 = false;
+export let drone_gps_pos = [30.394, -97.723, 240];
 
 
 
@@ -104,6 +105,7 @@ function ManageObjects() {
                                     if(drone_obj_array.length > 0) {
                                         drone_obj_array[0].gps_position = [message.latitude, message.longitude, message.altitude];
                                     }
+                                    drone_gps_pos = [message.latitude*10^-7, message.longitude*10^-7, message.altitude*10^-3]
                                 });
 
                                 Connection_checks_incoming_obj.checkups_listener1.subscribe( (message) => {

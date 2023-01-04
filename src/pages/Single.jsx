@@ -18,6 +18,7 @@ import '../css/Header.css';
 import {Drone} from '../models/drone';
 import {Nest} from '../models/nest';
 import ManageObjects from '../components/ManageObjects';
+import { drone_gps_pos } from '../components/ManageObjects';
 
 const MissionContext = React.createContext();
 
@@ -28,7 +29,7 @@ function Single() {
     let drone_obj = new Drone(1,"QROW",30.391,-97.727,240,100);
 
     function dropNest() {
-        nest_obj.position = drone_obj.gps_position;
+        nest_obj.position = drone_gps_pos;
     }
 
     return (
@@ -64,10 +65,10 @@ function Single() {
                         </Row>
                         <Row className='py-4'>
                             {/* <ManageObjects/> */}
-                            {/* <h2>Nest Control</h2>
+                            <h2>Nest Control</h2>
                             <Button variant='outline-secondary' onClick={dropNest}>
                                 Drop Nest
-                            </Button> */}
+                            </Button>
                         </Row>                 
                         {/* <Row className='py-4'>
                             <h2>Gimbal Control</h2>
