@@ -13,9 +13,9 @@ export class Drone {
         this.id = vin;
         this.dtype = dtype;
         this.gps_position = [latitude, longitude, altitude];
-        this.battery = battery;
+        this.battery = 100;
         this.state = "OFFLINE";
-        this.armed = false;
+        this.armed = "";
         this.distance_z = 0;
         this.vel_x = 0;
         this.vel_z = 0;       

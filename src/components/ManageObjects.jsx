@@ -50,6 +50,8 @@ export let drone1_vel_x = "OFFLINE";
 export let drone1_vel_y = "OFFLINE";
 export let drone1_armed = "OFFLINE";
 
+export let test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
+
 
 
 function createDrone() {
@@ -88,6 +90,12 @@ function ManageObjects() {
         console.log('Connection to websocket server closed.');
         });
     });
+
+    let drone_printout_array = [];
+
+    for (let i = 0; i < drone_obj_array.length; i++) {
+        drone_printout_array.push(<li>Drone object vin: {drone_obj_array[i].id}</li>);
+      }
     /////////////////////////////////
     return (
         <>
@@ -116,11 +124,15 @@ function ManageObjects() {
                                 let Velocity_incoming_obj = new Velocity_incoming();
                                 let Gimbal_outgoing_obj = new Gimbal_outgoing();
 
-                                GPS_incoming_obj.gps_listener2.subscribe( (message) => {
-                                    if(drone_obj_array.length > 0) {
-                                        drone_obj_array[0].gps_position = [message.latitude, message.longitude, message.altitude];
+                                // test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
+
+                                GPS_incoming_obj.gps_listener1.subscribe( (message) => {
+                                    // if(drone_obj_array.length > 0) {
+                                    //     drone_obj_array[0].gps_position = [message.latitude, message.longitude, message.altitude];
+                                    // }
+                                    if(message.lat != NaN) {
+                                        test_drone_obj.gps_position = [message.lat*(10**-7), message.lon*(10**-7), message.alt*(10**-3)]
                                     }
-                                    drone_gps_pos = [message.latitude*10^-7, message.longitude*10^-7, message.altitude*10^-3]
                                 });
 
                                 Connection_checks_incoming_obj.checkups_listener1.subscribe( (message) => {
@@ -144,7 +156,26 @@ function ManageObjects() {
                                 });
 
                                 State_incoming_obj.state_listener.subscribe( (message) => {
-                                    drone1_state = message.mode;
+                                    test_drone_obj.state = message.mode;
+
+                                    if (message.armed == false) {
+                                        test_drone_obj.armed = "DISARMED";
+                                      }
+                                      else if (message.armed == true) {
+                                        test_drone_obj.armed = "ARMED";
+                                      }
+                                      else {
+                                        test_drone_obj.armed = "DISCONNECTED FROM VEHICLE"
+                                      }
+                                });
+
+                                Distance_incoming_obj.distance_listener.subscribe( (message) => {
+                                    test_drone_obj.distance_z = message.range.toFixed(1)
+                                });
+
+                                Velocity_incoming_obj.velocity_listener.subscribe( (message) => {
+                                    test_drone_obj.vel_x = message.twist.linear.x;
+                                    test_drone_obj.vel_z = message.twist.linear.z;
                                 });
 
 
@@ -218,6 +249,7 @@ function ManageObjects() {
             {/* End mission deployment panel */}
 
             {/* Start gimbal sliders */}
+        
                 
             </Container>
         </>

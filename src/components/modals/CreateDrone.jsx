@@ -37,6 +37,9 @@ function CreateDroneModal() {
             let new_drone_obj = new Drone(newDrone_vin, newDrone_type, Number(newDrone_lat), Number(newDrone_lon), Number(newDrone_alt), 100);
             drone_obj_array.push(new_drone_obj);
         }
+        for (var i = 0; i < drone_obj_array.length; i++) {
+            console.log(drone_obj_array[i].id);
+        }
         handleClose()
     }
 
@@ -70,7 +73,6 @@ function CreateDroneModal() {
 
     const vinChangeHandler = (event) => {
         SetnewDrone_vin(event.target.value);
-        console.log(newDrone_vin);
       };
 
 

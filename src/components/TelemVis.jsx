@@ -13,6 +13,7 @@ import Stack from 'react-bootstrap/Stack';
 import '../css/Telem.css';
 import { gps_pos_tuple, state, armed, distance, velocity_x, velocity_z } from './RosCon';
 import { nest_coord } from './GimbalVis';
+import { test_drone_obj } from './ManageObjects';
 
 
 
@@ -22,7 +23,8 @@ function TelemVis(props) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-          updateData(gps_data = props.drone_obj.gps_position)
+        //   updateData(gps_data = props.drone_obj.gps_position)
+        updateData(gps_data = test_drone_obj.gps_position);
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -33,11 +35,11 @@ function TelemVis(props) {
                 <Col className='m-4'>
                     <Row> 
                         <Col>Current State</Col>
-                        <Col>{ props.drone_obj.state }</Col>
+                        <Col>{ test_drone_obj.state }</Col>
                     </Row>
                     <Row> 
                         <Col>Arming</Col>
-                        <Col>{ props.drone_obj.armed }</Col>
+                        <Col>{ test_drone_obj.armed }</Col>
                     </Row>
                     <Row> 
                         <Col>Forward Velocity</Col>
