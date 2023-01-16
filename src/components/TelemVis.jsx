@@ -19,12 +19,25 @@ import { test_drone_obj } from './ManageObjects';
 
 function TelemVis(props) {
 
-    var [gps_data, updateData] = useState([30.391,-97.727,0])
+    var [gps_data, updateGPSData] = useState([30.391,-97.727,0]);
+    var [state_data, updateStateData] = useState("OFFLINE");
+    var [armed_data, updateArmedData] = useState("OFFLINE");
+    var [battery_data, updateBatteryData] = useState("OFFLINE");
+    var [distz_data, updateDistzData] = useState("OFFLINE");
+    var [velx_data, updateVelxData] = useState("OFFLINE");
+    var [velz_data, updateVelzData] = useState("OFFLINE");
 
     useEffect(() => {
         const interval = setInterval(() => {
         //   updateData(gps_data = props.drone_obj.gps_position)
-        updateData(gps_data = test_drone_obj.gps_position);
+        updateGPSData(gps_data = test_drone_obj.gps_position);
+        updateStateData(state_data = test_drone_obj.state);
+        updateArmedData(armed_data = test_drone_obj.armed);
+        updateBatteryData(battery_data = test_drone_obj.battery);
+        updateDistzData(distz_data = test_drone_obj.distance_z);
+        updateVelxData(velx_data = test_drone_obj.vel_x);
+        updateVelzData(velz_data = test_drone_obj.vel_z);
+        console.log(test_drone_obj);
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -35,19 +48,19 @@ function TelemVis(props) {
                 <Col className='m-4'>
                     <Row> 
                         <Col>Current State</Col>
-                        <Col>{ test_drone_obj.state }</Col>
+                        <Col>{ state_data }</Col>
                     </Row>
                     <Row> 
                         <Col>Arming</Col>
-                        <Col>{ test_drone_obj.armed }</Col>
+                        <Col>{ armed_data }</Col>
                     </Row>
                     <Row> 
                         <Col>Forward Velocity</Col>
-                        <Col>{ props.drone_obj.vel_x } m/s</Col>
+                        <Col>{ velx_data } m/s</Col>
                     </Row>
                     <Row> 
                         <Col>Vertical Velocity</Col>
-                        <Col>{ props.drone_obj.vel_z } m/s</Col>
+                        <Col>{ velz_data } m/s</Col>
                     </Row>
                     <Row> 
                         <Col>Latitude</Col>
@@ -63,11 +76,11 @@ function TelemVis(props) {
                     </Row>
                     <Row> 
                         <Col>Ground Distance</Col>
-                        <Col>{ props.drone_obj.distance_z } m</Col>
+                        <Col>{ distz_data } m</Col>
                     </Row>
                     <Row> 
                         <Col>Battery</Col>
-                        <Col>{ props.drone_obj.battery }%</Col>
+                        <Col>{ battery_data }%</Col>
                     </Row>
                 </Col>
         </Container>

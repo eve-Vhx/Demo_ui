@@ -36,6 +36,16 @@ export class Mission_request_outgoing {
     }
 }
 
+export class Nest_gps_request_outgoing {
+    constructor() {
+        this.service_client = new ROSLIB.Service({
+            ros : ros,
+            name : '/nest_gps',
+            serviceType : 'sensor_msgs/NavSatFix'
+        });
+    }
+}
+
 export class State_incoming {
     constructor() {
         this.state_listener = new ROSLIB.Topic({
@@ -63,6 +73,16 @@ export class Velocity_incoming {
             name: '/mavros/setpoint_velocity/cmd_vel',
             messageType: 'geometry_msgs/TwistStamped'
           })
+    }
+}
+
+export class Battery_incoming {
+    constructor() {
+        this.battery_listener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/mavros/battery',
+            messageType: 'sensor_msgs/BatteryState'
+        })
     }
 }
 

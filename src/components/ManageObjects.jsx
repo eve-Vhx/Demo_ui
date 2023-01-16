@@ -28,7 +28,9 @@ import { Connection_checks_incoming } from "../ROSTopics/rosTopics";
 import { State_incoming } from "../ROSTopics/rosTopics";
 import { Distance_incoming } from "../ROSTopics/rosTopics";
 import { Velocity_incoming } from "../ROSTopics/rosTopics";
+import { Battery_incoming } from "../ROSTopics/rosTopics";
 import { Gimbal_outgoing } from "../ROSTopics/rosTopics";
+import { Nest_gps_request_outgoing } from "../ROSTopics/rosTopics";
 
 //Declare objects arrays
 export let drone_obj_array = []
@@ -51,6 +53,7 @@ export let drone1_vel_y = "OFFLINE";
 export let drone1_armed = "OFFLINE";
 
 export let test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
+export let test_nest_obj = new Nest('001', 30.394, -97.723, 240);
 
 
 
@@ -62,6 +65,20 @@ function createDrone() {
 function createNest() {
     let nest_obj = new Nest(1,30.391,-97.727,0);
     nest_obj_array.push(nest_obj);
+}
+
+function updateNests() {
+    let nest_service_client_obj = new Nest_gps_request_outgoing()
+    let nest_service_client = nest_service_client_obj.service_client;
+
+    // var request = new ROSLIB.ServiceRequest({
+    //   lat : parseFloat(mission_data.latitude),
+    //   lon : parseFloat(mission_data.longitude),
+    //   alt : parseFloat(mission_data.altitude)
+    // });
+    // service_client.callService(request, function(result) {
+    //   console.log('Result for service call: ' + result.completion);
+    // });
 }
 
 
@@ -114,7 +131,7 @@ function ManageObjects() {
                         <Button
                             variant="outline-success"
                             onClick={ () => { 
-                                ros.connect('ws://10.0.30.232:9090/');
+                                ros.connect('ws://10.0.30.232:8080/');
                                 //ros.connect('ws://localhost:9090/');
 
                                 let GPS_incoming_obj = new GPS_incoming()
@@ -122,6 +139,7 @@ function ManageObjects() {
                                 let State_incoming_obj = new State_incoming();
                                 let Distance_incoming_obj = new Distance_incoming();
                                 let Velocity_incoming_obj = new Velocity_incoming();
+                                let battery_incoming_obj = new Battery_incoming();
                                 let Gimbal_outgoing_obj = new Gimbal_outgoing();
 
                                 // test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
@@ -178,6 +196,10 @@ function ManageObjects() {
                                     test_drone_obj.vel_z = message.twist.linear.z;
                                 });
 
+                                battery_incoming_obj.battery_listener.subscribe( (message) => {
+                                    test_drone_obj.battery = message.percentage;
+                                });
+
 
                             }}>
                             eve Connect
@@ -230,6 +252,9 @@ function ManageObjects() {
                             <Button variant="outline-danger">- Nest</Button>
                         </Row>
                     </Col>
+                </Row>
+                <Row>
+                    <Button variant="outline-primary" onClick={updateNests}>Update Nests</Button>
                 </Row>
             {/* End drone and nest management panel */}
 

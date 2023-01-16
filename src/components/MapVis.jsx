@@ -22,6 +22,7 @@ import {service_client} from './RosCon';
 import { drone_obj_array } from "./ManageObjects";
 import { drone_gps_pos } from "./ManageObjects";
 import { Mission_request_outgoing } from "../ROSTopics/rosTopics";
+import { test_drone_obj } from "./ManageObjects";
 
 export var modal_vis = false;
 
@@ -61,7 +62,7 @@ function MapVis(props) {
           //updateDroneData(drone_data = props.drone_obj.gps_position);
           //updateDroneData(drone_data_1 = drone_obj_array[0].gps_position);
           //updateDroneData(drone_data_2 = drone_obj_array[1].gps_position);
-          updateDroneDataTest(test_drone_gps = drone_gps_pos);
+          updateDroneDataTest(test_drone_gps = test_drone_obj.gps_position);
           //console.log(drone_obj_array[0].gps_position)
           updateNestData(nest_data = nest_obj.position)
         }, 500);
