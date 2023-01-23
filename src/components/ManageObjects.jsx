@@ -23,7 +23,7 @@ import {Drone} from "../models/drone";
 import {Nest} from "../models/nest";
 
 //Import ROS Topics
-import { GPS_incoming } from "../ROSTopics/rosTopics";
+import { ConnectionsDrone_incoming, GPS_incoming } from "../ROSTopics/rosTopics";
 import { Connection_checks_incoming } from "../ROSTopics/rosTopics";
 import { State_incoming } from "../ROSTopics/rosTopics";
 import { Distance_incoming } from "../ROSTopics/rosTopics";
@@ -71,14 +71,13 @@ function updateNests() {
     let nest_service_client_obj = new Nest_gps_request_outgoing()
     let nest_service_client = nest_service_client_obj.service_client;
 
-    // var request = new ROSLIB.ServiceRequest({
-    //   lat : parseFloat(mission_data.latitude),
-    //   lon : parseFloat(mission_data.longitude),
-    //   alt : parseFloat(mission_data.altitude)
-    // });
-    // service_client.callService(request, function(result) {
-    //   console.log('Result for service call: ' + result.completion);
-    // });
+    var request = new ROSLIB.ServiceRequest({
+      
+    });
+    nest_service_client.callService(request, function(result) {
+      console.log('Result for service call: ' + result.latitude + result.longitude + result.altitude);
+      test_nest_obj.position = [result.latitude, result.longitude, result.altitude];
+    });
 }
 
 
@@ -135,12 +134,12 @@ function ManageObjects() {
                                 //ros.connect('ws://localhost:9090/');
 
                                 let GPS_incoming_obj = new GPS_incoming()
-                                let Connection_checks_incoming_obj = new Connection_checks_incoming()
                                 let State_incoming_obj = new State_incoming();
                                 let Distance_incoming_obj = new Distance_incoming();
                                 let Velocity_incoming_obj = new Velocity_incoming();
                                 let battery_incoming_obj = new Battery_incoming();
                                 let Gimbal_outgoing_obj = new Gimbal_outgoing();
+                                let Connections_drone_obj = new ConnectionsDrone_incoming();
 
                                 // test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
 
@@ -153,24 +152,22 @@ function ManageObjects() {
                                     }
                                 });
 
-                                Connection_checks_incoming_obj.checkups_listener1.subscribe( (message) => {
-                                    connection_check_pi1 = message.pi_connect;
-                                    connection_check_px41 = message.px4_connect;
-
-                                    if(connection_check_px41 == true) {
-                                        setConnectbadgecolorPx4('success');
-                                        setConnectbadgecolorPi('success');
+                                Connections_drone_obj.connections_listener.subscribe( (message) => {
+                                    if (message.mavros === true){
+                                        test_drone_obj.mavros_connect = "CONNECTED";
+                                    } else if (message.mavros === false) {
+                                        test_drone_obj.mavros_connect = "DISCONNECTED";
                                     }
-                                    else {
-                                        if (connection_check_pi1 == true) {
-                                            setConnectbadgecolorPi('success');
-                                            setConnectbadgecolorPx4('danger');
-                                        }
-                                        else {
-                                            setConnectbadgecolorPi('danger');
-                                            setConnectbadgecolorPx4('danger');
-                                        }
-                                    }
+                                    if (message.px4 === true){
+                                        test_drone_obj.px4_connect = "CONNECTED"
+                                    } else if (message.px4 === false){test_drone_obj.px4_connect = "DISCONNECTED"}
+                                    if (message.wifi === true){
+                                        test_drone_obj.wifi_connect = "CONNECTED"
+                                    } else if (message.wifi === false) {test_drone_obj.wifi_connect = "DISCONNECTED"}
+                                    if (message.lte === true){
+                                        test_drone_obj.lte_connect = "CONNECTED"
+                                    } else if (message.lte === false){test_drone_obj.lte_connect = "DISCONNECTED"}
+    
                                 });
 
                                 State_incoming_obj.state_listener.subscribe( (message) => {
@@ -212,18 +209,7 @@ function ManageObjects() {
                         </Button>
                     </Col>
                 </Row>
-                <Row className="m-4">
-                    <Col>
-                    <h4>
-                        <Badge bg={ ConnectbadgecolorPi }>Pi Connect</Badge>
-                    </h4>
-                    </Col>
-                    <Col>
-                    <h4>
-                        <Badge bg={ ConnectbadgecolorPx4 }>PX4 Connect</Badge>
-                    </h4>
-                    </Col>
-                </Row>
+                
             {/* End Connection to ROS and ROS topics */}
 
             {/* Start drone and nest management panel */}

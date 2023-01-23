@@ -36,12 +36,22 @@ export class Mission_request_outgoing {
     }
 }
 
+export class Nest_charge_request_outgoing {
+    constructor() {
+        this.service_client = new ROSLIB.Service({
+            ros : ros,
+            name : '/nest_charge_req',
+            serviceType : 'msg_pkg/NestChrg'
+        });
+    }
+}
+
 export class Nest_gps_request_outgoing {
     constructor() {
         this.service_client = new ROSLIB.Service({
             ros : ros,
-            name : '/nest_gps',
-            serviceType : 'sensor_msgs/NavSatFix'
+            name : '/nest1_gps',
+            serviceType : 'msg_pkg/NestGPSMessage'
         });
     }
 }
@@ -82,6 +92,16 @@ export class Battery_incoming {
             ros: ros,
             name: '/mavros/battery',
             messageType: 'sensor_msgs/BatteryState'
+        })
+    }
+}
+
+export class ConnectionsDrone_incoming {
+    constructor() {
+        this.connections_listener = new ROSLIB.Topic({
+            ros: ros,
+            name: '/d1_connection_checks',
+            messageType: 'msg_pkg/connections_drone'
         })
     }
 }

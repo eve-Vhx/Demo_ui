@@ -12,13 +12,14 @@ import MapVis from '../components/MapVis';
 import TelemVis from '../components/TelemVis';
 import GimbalVis from '../components/GimbalVis';
 import NestControl from '../components/ManageObjects';
-
+import NestVis from '../components/NestVis';
 import Logo from '../images/Logo-01.png';
 import '../css/Header.css';
 import {Drone} from '../models/drone';
 import {Nest} from '../models/nest';
 import ManageObjects from '../components/ManageObjects';
 import { drone_gps_pos } from '../components/ManageObjects';
+import { test_drone_obj } from '../components/ManageObjects';
 
 const MissionContext = React.createContext();
 
@@ -29,9 +30,8 @@ function Single() {
     let drone_obj = new Drone(1,"QROW",30.391,-97.727,240,100);
 
     function dropNest() {
-        nest_obj.position = drone_gps_pos;
+        nest_obj.position = test_drone_obj.gps_position;
     }
-
     return (
     <>
         <OuterErrorBound>
@@ -66,10 +66,11 @@ function Single() {
                         <Row className='py-4'>
                             {/* <ManageObjects/> */}
                             <h2>Nest Control</h2>
+                            <NestVis drone_obj = {drone_obj}/>
                             <Button variant='outline-secondary' onClick={dropNest}>
                                 Drop Nest
                             </Button>
-                        </Row>                 
+                        </Row>      
                         {/* <Row className='py-4'>
                             <h2>Gimbal Control</h2>
                             <GimbalVis/>

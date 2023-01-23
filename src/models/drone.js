@@ -25,6 +25,11 @@ export class Drone {
         this.perched = null;
         this.ipAddr = null;
 
+        this.px4_connect = "OFFLINE";
+        this.mavros_connect = "OFFLINE";
+        this.wifi_connect = "OFFLINE";
+        this.lte_connect = "OFFLINE";
+
     }
 }
 

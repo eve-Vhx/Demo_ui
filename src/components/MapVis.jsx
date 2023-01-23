@@ -8,7 +8,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
-
 // imports:
 import "maplibre-gl/dist/maplibre-gl.css";
 import drone_image from "../images/QROW_UI_new.png";
@@ -22,7 +21,8 @@ import {service_client} from './RosCon';
 import { drone_obj_array } from "./ManageObjects";
 import { drone_gps_pos } from "./ManageObjects";
 import { Mission_request_outgoing } from "../ROSTopics/rosTopics";
-import { test_drone_obj } from "./ManageObjects";
+import { test_drone_obj, test_nest_obj } from "./ManageObjects";
+import '../css/NestData.css';
 
 export var modal_vis = false;
 
@@ -141,7 +141,20 @@ function MapVis(props) {
                 
             {showPopup && (
                 <Popup latitude={nest_data[0]} longitude={nest_data[1]} closeButton={0}>
-                    <Button variant="success" onClick={(e) => {
+                  {/* <Container className="nestData p-2">
+                    <Col>
+                      <Row className="p-1">
+                          <h4>Nest 1 Status</h4>
+                      </Row>
+                      <Row className="p-1">
+                          <Col>Connected</Col>
+                      </Row>
+                      <Row className="p-1">
+                          <Col>Unoccupied</Col>
+                      </Row>
+                    </Col>
+                    </Container> */}
+                    <Button className="p-3" variant="success" onClick={(e) => {
                          setShowVerify(true);
                          modal_vis = true;
                     }}>Deploy To Nest</Button>

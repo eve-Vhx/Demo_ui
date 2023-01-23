@@ -13,7 +13,7 @@ import Stack from 'react-bootstrap/Stack';
 import '../css/Telem.css';
 import { gps_pos_tuple, state, armed, distance, velocity_x, velocity_z } from './RosCon';
 import { nest_coord } from './GimbalVis';
-import { test_drone_obj } from './ManageObjects';
+import { test_drone_obj, test_nest_obj } from './ManageObjects';
 
 
 
@@ -26,6 +26,10 @@ function TelemVis(props) {
     var [distz_data, updateDistzData] = useState("OFFLINE");
     var [velx_data, updateVelxData] = useState("OFFLINE");
     var [velz_data, updateVelzData] = useState("OFFLINE");
+    var [mavros_connect_data, updateMavrosData] = useState("OFFLINE");
+    var [px4_connect_data, updatePx4Data] = useState("OFFLINE");
+    var [wifi_connect_data, updateWifiData] = useState("OFFLINE");
+    var [lte_connect_data, updateLteData] = useState("OFFLINE");
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -37,7 +41,21 @@ function TelemVis(props) {
         updateDistzData(distz_data = test_drone_obj.distance_z);
         updateVelxData(velx_data = test_drone_obj.vel_x);
         updateVelzData(velz_data = test_drone_obj.vel_z);
-        console.log(test_drone_obj);
+
+        updateMavrosData(mavros_connect_data = test_drone_obj.mavros_connect);
+        updatePx4Data(px4_connect_data = test_drone_obj.px4_connect);
+        updateWifiData(wifi_connect_data = test_drone_obj.wifi_connect);
+        updateLteData(lte_connect_data = test_drone_obj.lte_connect);
+        // updatePx4Data(if(test_drone_obj.px4_connect === true) {
+        //     px4_connect_data = "CONNECTED"
+        // } else {px4_connect_data = "DISCONNECTED"});
+        // updateWifiData(if(test_drone_obj.wifi_connect === true) {
+        //     wifi_connect_data = "CONNECTED"
+        // } else {wifi_connect_data = "DISCONNECTED"});
+        // updateLteData(if(test_drone_obj.lte_connect === true) {
+        //     lte_connect_data = "CONNECTED"
+        // } else {lte_connect_data = "DISCONNECTED"});
+        // console.log(test_drone_obj);
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -81,6 +99,22 @@ function TelemVis(props) {
                     <Row> 
                         <Col>Battery</Col>
                         <Col>{ battery_data }%</Col>
+                    </Row>
+                    <Row> 
+                        <Col>LTE Connect</Col>
+                        <Col>{ lte_connect_data }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>WIFI Connect</Col>
+                        <Col>{ wifi_connect_data }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>MAVROS</Col>
+                        <Col>{ mavros_connect_data }</Col>
+                    </Row>
+                    <Row> 
+                        <Col>PX4</Col>
+                        <Col>{ px4_connect_data }</Col>
                     </Row>
                 </Col>
         </Container>

@@ -21,6 +21,7 @@ export var distance = 0;
 export var velocity_x = 0;
 export var velocity_z = 0;
 export var service_client = null;
+export var charge_client = null;
 export var gimbal_publisher = null;
 export const ROSLIB = require('roslib');
 
@@ -145,6 +146,13 @@ function ROSCon(props) {
                                 serviceType : 'msg_pkg/UiReq'
                               });
                               connection_status = true;
+
+
+                              charge_client = new ROSLIB.Service({
+                                ros : ros,
+                                name : '/nest_charge_req',
+                                serviceType : 'msg_pkg/chrgDrone'
+                              });
                             }
                         }}>
                         eve Connect
