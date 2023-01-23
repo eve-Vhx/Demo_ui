@@ -48,7 +48,7 @@ function NestVis(){
         console.log("Charging drone request sent");
         console.log(request.charge_drone);
         charge_client.callService(request, function(result) {
-            console.log('Result for service call: ' + result.completion);
+            console.log('Result for service call');
         });
     }
     
