@@ -66,7 +66,7 @@ function Single() {
                         <Row className='py-4'>
                             {/* <ManageObjects/> */}
                             <h2>Nest Control</h2>
-                            <NestVis drone_obj = {drone_obj}/>
+                            <NestVis/>
                             <Button variant='outline-secondary' onClick={dropNest}>
                                 Drop Nest
                             </Button>
