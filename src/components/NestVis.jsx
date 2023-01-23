@@ -39,13 +39,14 @@ function NestVis(){
         e.preventDefault()
 
         let charge_client_obj = new Nest_charge_request_outgoing();
-        let charge_client = charge_client_obj.charge_client;
+        let charge_client = charge_client_obj.service_client;
     
         var request = new ROSLIB.ServiceRequest({
             charge_drone : !charge_state
         });
         charge_state = !charge_state;
         console.log("Charging drone request sent");
+        console.log(request.charge_drone);
         charge_client.callService(request, function(result) {
             console.log('Result for service call: ' + result.completion);
         });
