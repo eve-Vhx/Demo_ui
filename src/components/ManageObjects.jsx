@@ -131,7 +131,7 @@ function ManageObjects() {
                             variant="outline-success"
                             onClick={ () => { 
                                 // ros.connect('ws://10.0.30.232:8080/');
-                                ros.connect('ws://localhost:9090/');
+                                ros.connect('ws://localhost:8080/');
 
                                 let GPS_incoming_obj = new GPS_incoming()
                                 let State_incoming_obj = new State_incoming();
