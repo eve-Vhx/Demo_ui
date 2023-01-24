@@ -1,5 +1,5 @@
 // package imports
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from 'react-bootstrap/Button';
 import Col from "react-bootstrap/Col";
@@ -13,6 +13,9 @@ import Table from "react-bootstrap/Table";
 import {service_client} from "./RosCon"
 
 import {gps_pos_tuple} from './RosCon';
+
+//Import CSS
+import "../css/MissionStatus.css";
 
 //Import modals
 import MissionModal from "./modals/MissionModal";
@@ -31,6 +34,9 @@ import { Velocity_incoming } from "../ROSTopics/rosTopics";
 import { Battery_incoming } from "../ROSTopics/rosTopics";
 import { Gimbal_outgoing } from "../ROSTopics/rosTopics";
 import { Nest_gps_request_outgoing } from "../ROSTopics/rosTopics";
+
+//Import drone mission details
+import { drone1_mission_status } from "./modals/MissionModal";
 
 //Declare objects arrays
 export let drone_obj_array = []
@@ -51,6 +57,7 @@ export let drone1_dist = "OFFLINE";
 export let drone1_vel_x = "OFFLINE";
 export let drone1_vel_y = "OFFLINE";
 export let drone1_armed = "OFFLINE";
+
 
 export let test_drone_obj = new Drone('001', 'QROW', 30.391, -97.727, 0, 100);
 export let test_nest_obj = new Nest('001', 30.394, -97.723, 240);
@@ -107,6 +114,20 @@ function ManageObjects() {
         });
     });
 
+    //Drone mission status updates
+    var [drone1_mission_status_, updateDroneMissionStatus] = useState(" ");
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            updateDroneMissionStatus("Testing case");
+            if (drone1_mission_status === 0) updateDroneMissionStatus("Success");
+            if (drone1_mission_status === 1) updateDroneMissionStatus("Error on the server. Another drone occupies destination");
+            if (drone1_mission_status === 2) updateDroneMissionStatus("Error on the server. Px4 and Mavros not connected");
+            if (drone1_mission_status === 3) updateDroneMissionStatus("Error on the server. Too long since last drone update");
+        }, 500);
+        return () => clearInterval(interval);
+      }, []);
+
     let drone_printout_array = [];
 
     for (let i = 0; i < drone_obj_array.length; i++) {
@@ -130,8 +151,8 @@ function ManageObjects() {
                         <Button
                             variant="outline-success"
                             onClick={ () => { 
-                                // ros.connect('ws://10.0.30.232:8080/');
-                                ros.connect('ws://localhost:8080/');
+                                ros.connect('ws://10.0.30.232:8080/');
+                                //ros.connect('ws://localhost:8080/');
 
                                 let GPS_incoming_obj = new GPS_incoming()
                                 let State_incoming_obj = new State_incoming();
@@ -256,6 +277,11 @@ function ManageObjects() {
 
                 <Row>
                     <MissionModal/>
+                </Row>
+
+                <Row>
+
+                    <p className="mission-status">{ drone1_mission_status_ }</p>
                 </Row>
             {/* End mission deployment panel */}
 

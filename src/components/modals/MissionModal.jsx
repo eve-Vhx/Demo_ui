@@ -14,6 +14,9 @@ import {service_client} from "../RosCon";
 import { Mission_request_outgoing } from "../../ROSTopics/rosTopics";
 
 
+// Exported variables
+export var drone1_mission_status;
+
 const initialMissionData = Object.freeze({
     latitude: 0,
     longitude: 0,
@@ -55,6 +58,8 @@ function DeploymentModal(props) {
     });
     service_client.callService(request, function(result) {
       console.log('Result for service call: ' + result.completion);
+      drone1_mission_status = result.completion;
+      
     });
 
     handleClose();
